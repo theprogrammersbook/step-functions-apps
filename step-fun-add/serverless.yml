@@ -1,0 +1,33 @@
+
+service: step-functions-simple-math
+plugins:
+  - serverless-step-functions
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+
+functions:
+  add:
+    handler: handler.add
+  double:
+    handler: handler.double
+stepFunctions:
+  stateMachines:
+    simple-maths-functions:
+      name: simple-maths-functions
+      definition:
+        Comment: example of demonstration function chaining
+        StartAt: Add
+        States:
+          Add:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [add,Arn]
+            Next: Double
+          Double:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [double,Arn]
+            End: true
