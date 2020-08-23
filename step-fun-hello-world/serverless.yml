@@ -1,0 +1,26 @@
+
+service: step-functions-helllo-world
+plugins:
+  - serverless-step-functions
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+
+
+functions:
+  helloman:
+    handler: handler.helloman
+stepFunctions:
+  stateMachines:
+    helloman:
+      name: helloman
+      definition:
+        Comment: helloman world example
+        StartAt: SayHelloman
+        States:
+          SayHelloman:
+            Type: Task
+            Resource:
+              Fn::GetAtt: [helloman,Arn]
+            End: true
